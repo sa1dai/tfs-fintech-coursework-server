@@ -4,7 +4,7 @@
   "description": "Tinkoff Fintech Frontend Coursework Server Spring 2019",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"	
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "mongodb": "^3.2.2"
   },

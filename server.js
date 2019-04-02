@@ -7,8 +7,10 @@ const MongoClient = require('mongodb').MongoClient;
 const client = new MongoClient(require('./config/db').url, { useNewUrlParser: true });
 
 const bodyParser = require('body-parser');
-
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const cors = require('cors')
+app.use(cors());
 
 client.connect(err => {
   if (err) {
