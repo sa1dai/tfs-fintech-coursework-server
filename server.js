@@ -4,8 +4,7 @@ const app = express();
 const port = 8000;
 
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://admin:F2At}r@cluster0-n7vis.mongodb.net/test?retryWrites=true";
-const client = new MongoClient(uri, { useNewUrlParser: true });
+const client = new MongoClient(require('./config/db').url, { useNewUrlParser: true });
 
 const bodyParser = require('body-parser');
 
