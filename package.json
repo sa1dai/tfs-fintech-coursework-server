@@ -1,0 +1,23 @@
+{
+  "name": "fintech-coursework-server",
+  "version": "0.1.0",
+  "description": "Tinkoff Fintech Frontend Coursework Server Spring 2019",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"	
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/maxim.boichenko/fintech-coursework-server.git"
+  },
+  "author": "Maxim Boichenko",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongodb": "^3.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
