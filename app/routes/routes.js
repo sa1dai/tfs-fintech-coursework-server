@@ -1,16 +1,21 @@
 const ObjectID = require("mongodb").ObjectID;
 const apiBase = '/api';
 
+const transformBoard = ({ _id: id, title }) => {
+  return { id, title };
+}
+
 module.exports = function(app, db) {
   // создание доски
   app.post(`${apiBase}/boards`, (req, res) => {
+    console.log(req.body);
     const board = { title: req.body.title };
 
-    db.collection('boards').insert(board, (err, result) => {
+    db.collection('boards').insert(board, (err, item) => {
       if (err) {
         res.send({ 'error': 'An error has occurred - ' + err });
       } else {
-        res.send(result.ops[0]);
+        res.send(transformBoard(item.ops[0]));
       }
     });
   });
@@ -18,7 +23,18 @@ module.exports = function(app, db) {
   // получение всех досок
   app.get(`${apiBase}/boards`, (req, res) => {
     db.collection('boards').find().toArray(function(err, items) {
-      res.send(items);
+      res.send(items.map(item => transformBoard(item)));
+    });
+  });
+
+  // удаление всех досок
+  app.delete(`${apiBase}/boards`, (req, res) => {
+    db.collection('boards').remove({ }, (err, item) => {
+      if (err) {
+        res.send({'error':'An error has occurred'});
+      } else {
+        res.send('All boards deleted!');
+      }
     });
   });
 
@@ -31,7 +47,7 @@ module.exports = function(app, db) {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
-        res.send(item);
+        res.send(transformBoard(item));
       }
     });
   });
@@ -45,7 +61,7 @@ module.exports = function(app, db) {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
-        res.send('Note ' + id + ' deleted!');
+        res.send('Board ' + id + ' deleted!');
       }
     });
   });

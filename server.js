@@ -8,9 +8,12 @@ const client = new MongoClient(require('./config/db').url, { useNewUrlParser: tr
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 const cors = require('cors')
 app.use(cors());
+
+app.use((req, res, next) => setTimeout(next, 1000));
 
 client.connect(err => {
   if (err) {
@@ -23,5 +26,3 @@ client.connect(err => {
     console.log('We are live on ' + port);
   });
 });
-
-
