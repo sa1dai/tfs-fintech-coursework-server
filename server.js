@@ -23,6 +23,6 @@ client.connect(err => {
   require('./app/routes')(app, client.db("tfs-coursework-spring-2019"));
 
   app.listen(port, () => {
-    console.log('We are live on ' + port);
+    console.log('Server starts on ' + port);
   });
 });
