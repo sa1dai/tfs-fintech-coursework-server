@@ -2,36 +2,25 @@ const utils = require('../utils/index');
 const ObjectID = require("mongodb").ObjectID;
 const apiBase = '/api';
 
-const transformBoard = ({ _id: id, title }) => {
-  return { id, title, url: encodeURI(`/b/${id}/${title}`) };
+const transformBoard = ({ _id: id, title, url_id }) => {
+  return { id, title, url: encodeURI(`/b/${url_id}/${title}`) };
 };
-
-async function createBoard(db, response, board) {
-  board._id = utils.getRandomString();
-
-  while (true) {
-    try {
-      let result = await db.collection('boards').insert(board);
-
-      response.send(transformBoard(result.ops[0]));
-      break;
-    } catch(err) {
-      const duplicateKeyError = 11000;
-
-      if (err.code === duplicateKeyError) {
-        board._id = utils.getRandomString();
-      } else {
-        response.send({ 'error': 'An error has occurred - ' + err });
-        break;
-      }
-    }
-  }
-}
 
 module.exports = function(app, db) {
   // создание доски
   app.post(`${apiBase}/boards`, (req, res) => {
-    createBoard(db, res, { title: req.body.title });
+    const board = {
+      title: req.body.title,
+      url_id: utils.getRandomString()
+    };
+
+    db.collection('boards').insert(board, (err, item) => {
+      if (err) {
+        res.send({ 'error': 'An error has occurred - ' + err });
+      } else {
+        res.send(transformBoard(item.ops[0]));
+      }
+    });
   });
 
   // получение всех досок
