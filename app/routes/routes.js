@@ -43,22 +43,19 @@ module.exports = function(app, db) {
 
   // получение доски по id
   app.get(`${apiBase}/boards/:id`, (req, res) => {
-    const id = req.params.id;
-    const details = { '_id': new ObjectID(id) };
-
-    db.collection('boards').findOne(details, (err, item) => {
+    db.collection('boards').find({ url_id: req.params.id }).toArray(function(err, items) {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
-        res.send(transformBoard(item));
+        res.send(transformBoard(items[0]));
       }
     });
   });
 
   // удаление доски по id
-  app.delete(`${apiBase}/boards/:id`, (req, res) => {
+  /*app.delete(`${apiBase}/boards/:id`, (req, res) => {
     const id = req.params.id;
-    const details = { '_id': new ObjectID(id) };
+    const details = { 'url_id': id };
 
     db.collection('boards').remove(details, (err, item) => {
       if (err) {
@@ -67,5 +64,5 @@ module.exports = function(app, db) {
         res.send('Board ' + id + ' deleted!');
       }
     });
-  });
+  });*/
 };
