@@ -18,7 +18,8 @@ module.exports = function(app, db) {
       if (err) {
         res.send({ 'error': 'An error has occurred - ' + err });
       } else {
-        res.send(transformBoard(item.ops[0]));
+        const { url } = transformBoard(item.ops[0]);
+        res.send({ url });
       }
     });
   });

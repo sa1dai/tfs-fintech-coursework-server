@@ -13,6 +13,10 @@ app.use(bodyParser.json());
 const cors = require('cors')
 app.use(cors());
 
+app.use((req, res, next) => {
+	console.log(`${req.method} ${req.originalUrl}`)
+  next();
+});
 app.use((req, res, next) => setTimeout(next, 1000));
 
 client.connect(err => {
