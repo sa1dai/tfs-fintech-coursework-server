@@ -1,9 +1,10 @@
 const utils = require('../utils/index');
-const ObjectID = require("mongodb").ObjectID;
 const apiBase = '/api';
 
-const transformBoard = ({ _id: id, title, url_id }) => {
-  return { id, title, url: encodeURI(`/b/${url_id}/${title}`) };
+const transformBoard = ({ _id: id, title, url_id, columns }) => {
+  return { 
+    id, title, url: encodeURI(`/b/${url_id}/${title}`), columns
+  };
 };
 
 module.exports = function(app, db) {
@@ -11,7 +12,8 @@ module.exports = function(app, db) {
   app.post(`${apiBase}/boards`, (req, res) => {
     const board = {
       title: req.body.title,
-      url_id: utils.getRandomString()
+      url_id: utils.getRandomString(),
+      columns: []
     };
 
     db.collection('boards').insert(board, (err, item) => {
@@ -33,7 +35,7 @@ module.exports = function(app, db) {
 
   // удаление всех досок
   app.delete(`${apiBase}/boards`, (req, res) => {
-    db.collection('boards').remove({ }, (err, item) => {
+    db.collection('boards').remove({ }, (err) => {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
@@ -53,17 +55,34 @@ module.exports = function(app, db) {
     });
   });
 
+  // сохранение доски по id
+  app.put(`${apiBase}/boards/:id`, (req, res) => {
+    const board = req.body;
+
+    db.collection('boards').update(
+      { url_id: req.params.id },
+      { $set: { title: board.title, columns: board.columns } },
+      (err) => {
+        if (err) { 
+          res.send({'error':'Save board failure'});
+        } else {
+          res.send('Save board success!');
+        }
+      }
+    );
+  });
+
   // удаление доски по id
-  /*app.delete(`${apiBase}/boards/:id`, (req, res) => {
+  app.delete(`${apiBase}/boards/:id`, (req, res) => {
     const id = req.params.id;
     const details = { 'url_id': id };
 
-    db.collection('boards').remove(details, (err, item) => {
+    db.collection('boards').remove(details, (err) => {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
         res.send('Board ' + id + ' deleted!');
       }
     });
-  });*/
+  });
 };
