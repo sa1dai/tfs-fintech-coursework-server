@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 const MongoClient = require('mongodb').MongoClient;
 const client = new MongoClient(require('./config/db').url, { useNewUrlParser: true });
