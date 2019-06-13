@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 	console.log(`${req.method} ${req.originalUrl}`)
   next();
 });
-app.use((req, res, next) => setTimeout(next, 1000));
+app.use((req, res, next) => setTimeout(next, 500));
 
 client.connect(err => {
   if (err) {
