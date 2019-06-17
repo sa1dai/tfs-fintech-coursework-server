@@ -3,7 +3,7 @@ const apiBase = '/api';
 
 const transformBoard = ({ _id: id, title, url_id, columns }) => {
   return { 
-    id, title, url: encodeURI(`/b/${url_id}/${title}`), columns
+    id, title, url: encodeURI(`/b/${url_id}`), columns
   };
 };
 
